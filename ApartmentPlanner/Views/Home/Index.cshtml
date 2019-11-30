@@ -1,31 +1,63 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Apartment Planner";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+<link href="https://fonts.googleapis.com/css?family=Mina:400,700&display=swap" rel="stylesheet">
+@Styles.Render("~/Content/IndexStyle.css")
+<div class="blackout_for_bg">
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
+    <header>
+        <div class="logo">
+            Apartment Planner
+        </div>
+        <img src="~/images/IndexPage/earth.png" alt="Выбор языка" class="change_lang" />
+        <div class="choose_lang">
+            <div class="english_lang">
+                <img src="~/images/IndexPage/united-kingdom.png" alt="english" />
+            </div>
+            <div class="russian_lang">
+                <img src="~/images/IndexPage/russia.png" alt="русский" />
+            </div>
+        </div>
+    </header>
+
+    <section class="main_capabilities">
+        <div class="black_line"></div>
+        <div class="view_capability">
+            <img src="~/images/IndexPage/idea.png" alt="Идея" />
+            <div class="text_capability">Реализуй свои идеи</div>
+        </div>
+        <div class="black_line"></div>
+        <div class="view_capability">
+            <img src="~/images/IndexPage/plan.png" alt="Идея" />
+            <div class="text_capability">Закажи проектировку</div>
+        </div>
+        <div class="black_line"></div>
+        <div class="view_capability">
+            <img src="~/images/IndexPage/money_income.png" alt="Идея" />
+            <div class="text_capability">Стань проектировщиком</div>
+        </div>
+        <div class="black_line"></div>
+    </section>
+
+    <section class="menu">
+        <button class="menu_btn">
+            <div class="text_btn">Вход</div>
+            <div class="icon_btn">
+                <img class="icon_btn_sign_in" src="~/images/IndexPage/sign_in.png" alt="Войти" />
+            </div>
+        </button>
+        <button class="menu_btn">
+            <div class="text_btn">Регистрация</div>
+            <div class="icon_btn">
+                <img class="icon_btn_sign_up" src="~/images/IndexPage/sign_up.png" alt="Зарегистрироваться" />
+            </div>
+        </button>
+        <button class="menu_btn">
+            <div class="text_btn">Начать проектировать</div>
+            <div class="icon_btn">
+                <img class="icon_btn_begin_plan" src="~/images/IndexPage/begin_plan.png" alt="Начать проектировать" />
+            </div>
+        </button>
+    </section>
 </div>
