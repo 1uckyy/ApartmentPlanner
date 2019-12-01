@@ -16,6 +16,10 @@
 
 
 /*Header*/
+.logo_link {
+    text-decoration: none;
+}
+
 .logo {
     width: 361px;
     background: #552626;
@@ -31,6 +35,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #FFFFFF;
+    cursor: pointer;
 }
 
 .change_lang {
@@ -39,21 +44,24 @@
     position: absolute;
     top: 36px;
     right: 22px;
+    z-index: 2;
+}
+
+.change_lang:hover + .choose_lang {
+    display: block;
 }
 
 .choose_lang {
     display: none;
-    opacity: 0;
     position: absolute;
-    top: 79px;
+    top: 77px;
     right: 22px;
     z-index: 1;
     cursor: pointer;
 }
 
-.change_lang:hover .choose_lang {
+.choose_lang:hover {
     display: block;
-    opacity: 1;
 }
 
 .choose_lang div {
