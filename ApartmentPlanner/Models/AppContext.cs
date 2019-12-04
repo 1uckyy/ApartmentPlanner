@@ -13,6 +13,8 @@ namespace ApartmentPlanner.Models
         //относится к строке подключения name="IdentityDb"
         public AppContext() : base("IdentityDb") { }
 
+        public DbSet<FurnitureItemModel> FurnitureItemModels { get; set; }
+
         public static AppContext Create()
         {
             return new AppContext();

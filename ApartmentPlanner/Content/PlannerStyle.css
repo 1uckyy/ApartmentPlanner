@@ -1,0 +1,131 @@
+﻿body {
+    margin: 0;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 30px;
+}
+
+
+/*Header*/
+header {
+    width: 100%;
+    height: 11vh;
+    background-color: #552626;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    position: relative;
+}
+
+.logo_text_around {
+    padding: 33px 0 0 44px;
+    width: fit-content;
+}
+
+.save_btn {
+    width: 180px;
+    height: 55px;
+    background: rgba(41, 72, 129, 0.9);
+    border-radius: 10px;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    line-height: 38px;
+    text-align: center;
+    color: #FFFFFF;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.change_lang {
+    top: 30px;
+}
+
+.choose_lang {
+    top: 70px;
+}
+
+
+/*Main*/
+.main {
+    display: flex;
+    height: 89vh;
+}
+
+.added_elems {
+    width: 22%;
+}
+
+canvas {
+    background-color: rgb(219, 226, 226);
+    width: 56%;
+}
+
+.elems_for_add {
+    width: 22%;
+}
+
+.added_elems_text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 97px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.furniture_items_container {
+    height: calc(89vh - 97px);
+    overflow-y: auto;
+}
+
+.furniture_item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    height: 25%;
+}
+
+.img_fur_item {
+    width: 100px;
+    height: 107px;
+}
+
+.circle_add {
+    width: 50px;
+    height: 50px;
+    margin-left: 50px;
+    background: #63BD44;
+    border-radius: 90px;
+    cursor: pointer;
+    position: relative;
+}
+
+.horiz_line {
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 4px;
+    background-color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.vert_line {
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 26px;
+    background-color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

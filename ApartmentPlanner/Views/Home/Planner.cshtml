@@ -1,7 +1,36 @@
-﻿
+﻿@model IEnumerable<ApartmentPlanner.Models.FurnitureItemModel>
+@using ApartmentPlanner.Helpers
+
 @{
     ViewBag.Title = "Planner";
 }
 
-<h2>Planner</h2>
+@Styles.Render("~/Content/PlannerStyle.css")
 
+<header id="header">
+    <div class="logo_text_around">
+        <div id="logo" class="logo_text">
+            Apartment Planner
+        </div>
+    </div>
+    <button id="save_btn" class="save_btn">Сохранить</button>
+    @Html.Partial("PartialChangeLang")
+</header>
+
+<section class="main">
+    <div id="added_elems" class="added_elems">
+        <div class="added_elems_text">Добавленные элементы</div>
+    </div>
+    <canvas id="canvas" width="800" height="800">Ваш браузер не поддерживает canvas</canvas>
+    <div class="elems_for_add">
+        <div class="added_elems_text">Элементы для добавления</div>
+        <div class="furniture_items_container">
+            @foreach (ApartmentPlanner.Models.FurnitureItemModel furniture in Model)
+            {
+                @ListFurnitureHelper.CreateList(Html, furniture.ImgSrc)
+            }
+        </div>
+    </div>
+</section>
+
+@Scripts.Render("~/Scripts/DeveloperScripts/CanvasPlannerScript.js")

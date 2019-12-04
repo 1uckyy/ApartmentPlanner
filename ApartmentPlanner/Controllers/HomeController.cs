@@ -3,29 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ApartmentPlanner.Models;
 
 namespace ApartmentPlanner.Controllers
 {
     public class HomeController : Controller
     {
+        Models.AppContext db = new Models.AppContext();
+
         public ActionResult Index()
         {
-            int a = 5;
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult PartialChangeLang()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            return PartialView();
         }
 
-        public ActionResult Contact()
+        public ActionResult Planner()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            return View(db.FurnitureItemModels);
         }
     }
 }

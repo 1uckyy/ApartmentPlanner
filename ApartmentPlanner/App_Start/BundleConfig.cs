@@ -23,8 +23,7 @@ namespace ApartmentPlanner
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/Site.css"));
+                      "~/Content/GeneralStyle.css"));
         }
     }
 }

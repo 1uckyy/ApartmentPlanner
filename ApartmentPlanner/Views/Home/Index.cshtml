@@ -2,25 +2,17 @@
     ViewBag.Title = "Apartment Planner";
 }
 
-<link href="https://fonts.googleapis.com/css?family=Mina:400,700&display=swap" rel="stylesheet">
 @Styles.Render("~/Content/IndexStyle.css")
+
 <div class="blackout_for_bg">
 
     <header>
-        <a class="logo_link" href="~/Home/Index">
-            <div class="logo">
+        <div id="logo" class="logo">
+            <div class="logo_text">
                 Apartment Planner
             </div>
-        </a>
-        <img src="~/images/IndexPage/earth.png" alt="Выбор языка" class="change_lang" />
-        <div class="choose_lang">
-            <div class="english_lang">
-                <img src="~/images/IndexPage/united-kingdom.png" alt="english" />
-            </div>
-            <div class="russian_lang">
-                <img src="~/images/IndexPage/russia.png" alt="русский" />
-            </div>
         </div>
+        @Html.Partial("PartialChangeLang")
     </header>
 
     <section class="main_capabilities">
@@ -55,7 +47,7 @@
                 <img class="icon_btn_sign_up" src="~/images/IndexPage/sign_up.png" alt="Зарегистрироваться" />
             </div>
         </button>
-        <button class="menu_btn">
+        <button id="begin_plan" class="menu_btn">
             <div class="text_btn">Начать проектировать</div>
             <div class="icon_btn">
                 <img class="icon_btn_begin_plan" src="~/images/IndexPage/begin_plan.png" alt="Начать проектировать" />
@@ -63,3 +55,5 @@
         </button>
     </section>
 </div>
+
+@Scripts.Render("~/Scripts/DeveloperScripts/IndexPage.js")

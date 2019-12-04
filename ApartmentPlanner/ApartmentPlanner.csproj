@@ -159,8 +159,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ListFurnitureHelper.cs" />
+    <Compile Include="Migrations\201911241718327_InitialCreate.cs" />
+    <Compile Include="Migrations\201911241718327_InitialCreate.Designer.cs">
+      <DependentUpon>201911241718327_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912040532359_MigrateDb.cs" />
+    <Compile Include="Migrations\201912040532359_MigrateDb.Designer.cs">
+      <DependentUpon>201912040532359_MigrateDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AppContext.cs" />
     <Compile Include="Models\AppUserManager.cs" />
+    <Compile Include="Models\FurnitureItemModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Models\User.cs" />
@@ -171,11 +182,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\GeneralStyle.css" />
     <Content Include="Content\IndexStyle.css" />
+    <Content Include="Content\PlannerStyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="images\IndexPage\begin_plan.png" />
     <Content Include="images\IndexPage\bg.jpg" />
     <Content Include="images\IndexPage\earth.png" />
@@ -186,9 +198,18 @@
     <Content Include="images\IndexPage\sign_in.png" />
     <Content Include="images\IndexPage\sign_up.png" />
     <Content Include="images\IndexPage\united-kingdom.png" />
+    <Content Include="images\PlannerPage\earth_white.png" />
+    <Content Include="images\PlannerPage\FurnitureItems\bed.png" />
+    <Content Include="images\PlannerPage\FurnitureItems\chair.png" />
+    <Content Include="images\PlannerPage\FurnitureItems\flower.png" />
+    <Content Include="images\PlannerPage\FurnitureItems\sofa.png" />
+    <Content Include="images\PlannerPage\FurnitureItems\table.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\DeveloperScripts\CanvasPlannerScript.js" />
+    <Content Include="Scripts\DeveloperScripts\GeneralScript.js" />
+    <Content Include="Scripts\DeveloperScripts\IndexPage.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -214,6 +235,7 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\Planner.cshtml" />
+    <Content Include="Views\Home\PartialChangeLang.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -230,6 +252,14 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201911241718327_InitialCreate.resx">
+      <DependentUpon>201911241718327_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912040532359_MigrateDb.resx">
+      <DependentUpon>201912040532359_MigrateDb.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
