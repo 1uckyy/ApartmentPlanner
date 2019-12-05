@@ -204,6 +204,7 @@
     <Content Include="images\PlannerPage\FurnitureItems\flower.png" />
     <Content Include="images\PlannerPage\FurnitureItems\sofa.png" />
     <Content Include="images\PlannerPage\FurnitureItems\table.png" />
+    <Content Include="images\PlannerPage\recycle_bin.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
