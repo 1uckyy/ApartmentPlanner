@@ -25,31 +25,54 @@ var changeSizeXRight = false;
 var changeSizeYTop = false;
 var changeSizeYBottom = false;
 
-var Rect = function (img, x, y, w, h) {
+var Rect = function (img, x, y, w, h, angle) {
     this.x = x;
     this.y = y;
+    this.prevX = x + w / 2;
+    this.prevY = y + h / 2;
     this.w = w;
     this.h = h;
     this.img = new Image();
     this.img.src = img;
+    this.angle = angle;
 }
 
 Rect.prototype = {
+    returnX: function () {
+        return this.x;
+    },
+
+    returnY: function () {
+        return this.y;
+    },
+
+    contextSet: function () {
+        let newX = this.returnX() + this.w / 2;
+        let newY = this.returnY() + this.h / 2;
+        context.translate(newX, newY);
+        context.rotate(this.angle * Math.PI / 180);
+    },
+
+    contextUnset: function () {
+        let newX = this.returnX() + this.w / 2;
+        let newY = this.returnY() + this.h / 2;
+        context.rotate(-this.angle * Math.PI / 180);
+        context.translate(-newX, -newY);
+    },
+
     draw: function () {
-        context.drawImage(this.img, this.x, this.y, this.w, this.h);
+        context.drawImage(this.img, -this.w / 2, -this.h / 2, this.w, this.h);
     },
 
     stroke: function () {
-        context.strokeRect(this.x, this.y, this.w, this.h);
+        context.strokeRect(-this.w / 2, -this.h / 2, this.w, this.h);
     }
 }
 
 var i, rects = [], count = 0, strokeRect = false;
 
-
-
 function add(imgSrc) {
-    rects.push(new Rect(imgSrc, 400, 300, 100, 107));
+    rects.push(new Rect(imgSrc, 300, 300, 100, 107, 0));
 
     let item = document.createElement("div");
     item.setAttribute("class", "added_elem");
@@ -70,7 +93,7 @@ function add(imgSrc) {
 
     let burger_params = document.createElement("div");
     burger_params.setAttribute("class", "burger_params");
-    burger_params.setAttribute("onclick", "addParams(" + (count-1) + ")");
+    burger_params.setAttribute("onclick", "addParams(" + (count - 1) + ")");
     let burger_params_line = document.createElement("div");
     burger_params_line.setAttribute("class", "burger_params_line");
     burger_params.appendChild(burger_params_line);
@@ -234,17 +257,9 @@ setInterval(() => {
     canvas.style.cursor = "default";
 
     for (i in rects) {
-        //отрисовка объектов
-        //if (i == 1) {
-        //    context.save();
-        //    context.rotate(Math.PI / 2);
-        //    rects[i].draw();
-        //    rects[i].x = 300;
-        //    rects[i].y = -400;
-        //    context.restore();
-        //} else {
-            rects[i].draw();
-        //}
+        rects[i].contextSet();
+
+        rects[i].draw();
 
         let item = document.getElementById("item" + i);
         //сброс фона добавленного элемента
@@ -257,11 +272,15 @@ setInterval(() => {
             //установка фона выбранного добавленного элемента
             item.setAttribute("style", "background-color: rgb(219, 226, 226);");
         }
+
+        rects[i].contextUnset();
     }
 
     //отрисовка синих границ объекта, если навелись на item
     if (strokeRect != false) {
+        strokeRect.contextSet();
         strokeRect.stroke();
+        strokeRect.contextUnset();
     }
 
     //перемещение объекта
