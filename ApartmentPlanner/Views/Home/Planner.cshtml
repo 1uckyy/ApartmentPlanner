@@ -19,9 +19,17 @@
 
 <section class="main">
     <div id="added_elems" class="added_elems">
-        <div class="added_elems_text"><div>Добавленные элементы</div><img class="clear_btn" src="~/images/PlannerPage/recycle_bin.png" alt="Clear container" onclick="clearContainer()" /></div>
+        <div class="added_elems_text">
+            <div>Добавленные элементы</div>
+            <img class="clear_btn" src="~/images/PlannerPage/recycle_bin.png" alt="Clear container" onclick="clearContainer()" />
+            <div style="display: flex; position: relative;">
+                <input type="text" name="searchItem" value="" placeholder="Поиск..." id="searchItem" oninput="searchItem()" />
+                <img src="~/images/PlannerPage/search.png" alt="Поиск" class="img_search"/>
+            </div>
+        </div>
         <div id="added_elems_container" class="added_elems_container"></div>
     </div>
+    <label id="itemName" class="item_name"></label>
     <canvas id="canvas" width="800" height="800">Ваш браузер не поддерживает canvas</canvas>
     <div class="elems_for_add">
         <div class="added_elems_text">Элементы для добавления</div>

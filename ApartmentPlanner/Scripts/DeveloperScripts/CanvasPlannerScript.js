@@ -69,7 +69,7 @@ Rect.prototype = {
     }
 }
 
-var i, rects = [], count = 0, strokeRect = false;
+var i, rects = [], count = 0, strokeRect = false, namesArray = [];
 
 function add(imgSrc) {
     rects.push(new Rect(imgSrc, 300, 300, 100, 107, 0));
@@ -82,26 +82,122 @@ function add(imgSrc) {
     item.onmouseover = () => { strokeRect = rects[test]; }
     item.onmouseout = () => { strokeRect = false }
 
+    let deleteItem = document.createElement("img");
+    deleteItem.setAttribute("src", "/images/PlannerPage/remove.png");
+    deleteItem.setAttribute("class", "delete_item_img");
+    deleteItem.setAttribute("onclick", "deleteItem(" + count + ")");
+
     let img = document.createElement("img");
     img.setAttribute("src", imgSrc);
     img.setAttribute("class", "img_added_elem");
 
-    count++;
-    let textField = document.createElement("input");
-    textField.setAttribute("value", "Item " + count);
-    textField.setAttribute("class", "textfield_added_elem");
-
     let burger_params = document.createElement("div");
     burger_params.setAttribute("class", "burger_params");
-    burger_params.setAttribute("onclick", "addParams(" + (count - 1) + ")");
+    burger_params.setAttribute("onclick", "addParams(" + count + ")");
     let burger_params_line = document.createElement("div");
     burger_params_line.setAttribute("class", "burger_params_line");
     burger_params.appendChild(burger_params_line);
 
+    count++;
+    let textField = document.createElement("input");
+    textField.setAttribute("class", "textfield_added_elem");
+    calculationItemName(textField);
+
+    item.appendChild(deleteItem);
     item.appendChild(img);
     item.appendChild(textField);
     item.appendChild(burger_params);
     addedElemsContainer.appendChild(item);
+}
+
+//вычисление названия item'a
+function calculationItemName(textField) {
+    if (namesArray.length == 0) {
+        namesArray.push(1);
+        textField.setAttribute("value", "Item " + 1);
+    } else if (namesArray.length == 1) {
+        if (namesArray[0] > 1) {
+            textField.setAttribute("value", "Item " + 1);
+            namesArray.push(1);
+        } else {
+            textField.setAttribute("value", "Item " + 2);
+            namesArray.push(2);
+        }
+    } else {
+        namesArray.sort();
+        if (namesArray[0] > 1) {
+            textField.setAttribute("value", "Item " + 1);
+            namesArray.push(1);
+        } else {
+            let detected = false;
+            for (var i = 0; i < namesArray.length; i++) {
+                if ((namesArray[i + 1] - namesArray[i]) > 1 && namesArray[i + 1] != namesArray[i]) {
+                    textField.setAttribute("value", "Item " + (namesArray[i] + 1));
+                    namesArray.push(namesArray[i] + 1);
+                    detected = true;
+                    break;
+                }
+            }
+            if (detected == false) {
+                textField.setAttribute("value", "Item " + (namesArray[namesArray.length - 1] + 1));
+                namesArray.push((namesArray[namesArray.length - 1] + 1));
+            }
+        }
+    }
+}
+
+function deleteItem(id) {
+    let deleteItemDiv = document.getElementById("item" + id);
+
+    //удаление названия элемента из массива названий
+    let itemName = deleteItemDiv.querySelector("input.textfield_added_elem").value;
+    let itemNameArr = itemName.split(" ");
+    let indexNameItem = namesArray.indexOf(parseInt(itemNameArr[1]));
+    if (itemNameArr[0] == "Item") {
+        namesArray.splice(indexNameItem, 1);
+    }
+
+    rects.splice(id, 1);
+    addedElemsContainer.removeChild(deleteItemDiv);
+
+    var index = 0;
+    //переопределение id
+    let node = addedElemsContainer.firstChild;
+    if (node !== null) {
+        redefinitionId(node, index);
+        while ((node = node.nextSibling) !== null) {
+            index++;
+            redefinitionId(node, index);
+        }
+        count = ++index;
+    } else {
+        strokeRect = false;
+        clearContainer();
+    }
+}
+
+//поиск объекта
+function searchItem() {
+    let searchValue = document.getElementById("searchItem").value;
+    let reg = new RegExp("^" + searchValue);
+    let item = addedElemsContainer.firstChild;
+    if (item != null) {
+        do {
+            if (reg.test(item.querySelector("input.textfield_added_elem").value))
+                item.setAttribute("class", "added_elem");
+            else
+                item.setAttribute("class", "added_elem hidden");
+        } while ((item = item.nextSibling) != null)
+    }
+}
+
+//переопределение id
+function redefinitionId(node, index) {
+    node.setAttribute("id", "item" + index);
+    node.onmouseover = () => { strokeRect = rects[index]; }
+
+    node.firstChild.setAttribute("onclick", "deleteItem(" + index + ")");
+    node.lastChild.setAttribute("onclick", "addParams(" + index + ")");
 }
 
 function addParams(id) {
@@ -109,6 +205,8 @@ function addParams(id) {
 
     if (item.querySelector("div.params_box")) {
         let findParamsBox = item.lastChild;
+        item.removeChild(findParamsBox);
+        findParamsBox = item.lastChild;
         item.removeChild(findParamsBox);
 
         let burgerParams = item.querySelector("div.burger_to_x");
@@ -125,7 +223,7 @@ function addParams(id) {
 
         let labelAndInputX = document.createElement("div");
         let labelX = document.createElement("label");
-        labelX.innerText = "X: ";
+        labelX.innerText = "Коорд. X: ";
         let textFieldX = document.createElement("input");
         textFieldX.setAttribute("class", "text_field_params_box");
         textFieldX.setAttribute("value", rects[id].x);
@@ -136,7 +234,7 @@ function addParams(id) {
 
         let labelAndInputY = document.createElement("div");
         let labelY = document.createElement("label");
-        labelY.innerText = "Y: ";
+        labelY.innerText = "Коорд. Y: ";
         let textFieldY = document.createElement("input");
         textFieldY.setAttribute("class", "text_field_params_box");
         textFieldY.setAttribute("value", rects[id].y);
@@ -154,7 +252,7 @@ function addParams(id) {
 
         let labelAndInputW = document.createElement("div");
         let labelW = document.createElement("label");
-        labelW.innerText = "W: ";
+        labelW.innerText = "Ширина: ";
         let textFieldW = document.createElement("input");
         textFieldW.setAttribute("class", "text_field_params_box");
         textFieldW.setAttribute("value", rects[id].w);
@@ -165,7 +263,7 @@ function addParams(id) {
 
         let labelAndInputH = document.createElement("div");
         let labelH = document.createElement("label");
-        labelH.innerText = "H: ";
+        labelH.innerText = "Высота: ";
         let textFieldH = document.createElement("input");
         textFieldH.setAttribute("class", "text_field_params_box");
         textFieldH.setAttribute("value", rects[id].h);
@@ -180,6 +278,40 @@ function addParams(id) {
         paramsBox.appendChild(WHBox);
         paramsBox.appendChild(XYBox);
         item.appendChild(paramsBox);
+
+        let sliderBox = document.createElement("div");
+        sliderBox.setAttribute("class", "slider_box");
+        let sliderLabel = document.createElement("label");
+        sliderLabel.innerText = "Угол поворота: ";
+        let sliderDiv = document.createElement("div");
+        sliderDiv.setAttribute("style", "display: flex; align-items: center;");
+        let minValue = document.createElement("label");
+        minValue.innerText = 0;
+        let slider = document.createElement("input");
+        slider.setAttribute("type", "range");
+        slider.setAttribute("min", "0");
+        slider.setAttribute("max", "360");
+        slider.setAttribute("step", "1");
+        slider.setAttribute("id", "slider" + id);
+        slider.setAttribute("value", rects[id].angle);
+        slider.setAttribute("oninput", "rotate(" + id + ")");
+        let maxValue = document.createElement("label");
+        maxValue.innerText = 360;
+        let sliderValue = document.createElement("input");
+        sliderValue.setAttribute("id", "sliderValue" + id);
+        sliderValue.setAttribute("class", "slider_value");
+        sliderValue.setAttribute("oninput", "rotateValue(" + id + ")");
+        sliderValue.value = rects[id].angle;
+
+        sliderDiv.appendChild(minValue);
+        sliderDiv.appendChild(slider);
+        sliderDiv.appendChild(maxValue);
+
+        sliderBox.appendChild(sliderLabel);
+        sliderBox.appendChild(sliderDiv);
+        sliderBox.appendChild(sliderValue);
+        item.appendChild(sliderBox);
+
 
         let burgerParams = item.querySelector("div.burger_params_line");
         burgerParams.removeAttribute("class");
@@ -211,13 +343,30 @@ function inputH(id) {
     rects[id].h = parseInt(textFieldH.value);
 }
 
+//ползунок поворота
+function rotate(id) {
+    let slider = document.getElementById("slider" + id);
+    let sliderValue = document.getElementById("sliderValue" + id);
+    rects[id].angle = slider.value;
+    sliderValue.value = slider.value;
+}
+
+//поле для ввода угла поворота
+function rotateValue(id) {
+    let slider = document.getElementById("slider" + id);
+    let sliderValue = document.getElementById("sliderValue" + id);
+    rects[id].angle = sliderValue.value;
+    slider.value = sliderValue.value;
+}
+
 function clearContainer() {
     rects.splice(0);
+    namesArray.splice(0);
     while (addedElemsContainer.firstChild != null) {
-        count--;
         let elem = addedElemsContainer.firstChild;
         addedElemsContainer.removeChild(elem);
     }
+    count = 0;
 }
 
 var isCursorInRect = (rect) => {
@@ -252,9 +401,30 @@ var isCursorInRect = (rect) => {
     return (mouse.x > rect.x) && (mouse.x < rectRight) && (mouse.y > rect.y) && (mouse.y < rectBottom);
 }
 
+//function drawGrid() {
+//    for (var x = 0.5; x < canvasWidth; x += 30) {
+//        context.moveTo(x, 0);
+//        context.lineTo(x, canvasHeight);
+//    }
+
+//    for (var y = 0.5; y < canvasHeight; y += 30) {
+//        context.moveTo(0, y);
+//        context.lineTo(canvasWidth, y);
+//    }
+
+//    context.strokeStyle = "#888";
+//    context.stroke();
+//}
+
 setInterval(() => {
     context.clearRect(0, 0, canvasWidth, canvasHeight);
     canvas.style.cursor = "default";
+
+    //drawGrid();
+
+    //сброс названия
+    let itemName = document.getElementById("itemName");
+    itemName.innerText = "";
 
     for (i in rects) {
         rects[i].contextSet();
@@ -266,8 +436,11 @@ setInterval(() => {
         item.setAttribute("style", "");
 
         if (isCursorInRect(rects[i])) {
+            context.strokeStyle = '#001EFF';
             //отрисовка синих границ объекта
             rects[i].stroke();
+            //название объекта
+            itemName.innerText = item.querySelector("input.textfield_added_elem").value;
 
             //установка фона выбранного добавленного элемента
             item.setAttribute("style", "background-color: rgb(219, 226, 226);");
@@ -279,6 +452,7 @@ setInterval(() => {
     //отрисовка синих границ объекта, если навелись на item
     if (strokeRect != false) {
         strokeRect.contextSet();
+        context.strokeStyle = '#001EFF';
         strokeRect.stroke();
         strokeRect.contextUnset();
     }
