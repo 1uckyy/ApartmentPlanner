@@ -239,7 +239,7 @@ input[type=range] {
 }
 
 canvas {
-    background-color: #CAE0E4;
+    background-color: beige;
     width: 56%;
 }
 
@@ -333,4 +333,26 @@ canvas {
     background-color: rgb(219, 226, 226);
     padding: 5px;
     outline: none;
+}
+
+.change_room_size {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 15px;
+    right: 23%;
+    border-radius: 6px;
+    padding: 5px;
+    background-color: white;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
+}
+
+.input_wh {
+    width: 40px;
+    height: 20px;
+    margin: 0 6px;
+}
+
+.label_wh {
+    font-size: 18px;
 }

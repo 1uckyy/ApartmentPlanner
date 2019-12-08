@@ -73,7 +73,7 @@ Rect.prototype = {
 var i, rects = [], count = 0, strokeRect = false, namesArray = [];
 
 function add(imgSrc) {
-    rects.push(new Rect(imgSrc, 300, 300, 100, 107, 0));
+    rects.push(new Rect(imgSrc, 0, 0, 100, 107, 0));
 
     let item = document.createElement("div");
     item.setAttribute("class", "added_elem");
@@ -253,7 +253,7 @@ function addParams(id) {
 
         let labelAndInputW = document.createElement("div");
         let labelW = document.createElement("label");
-        labelW.innerText = "Ширина: ";
+        labelW.innerText = "Ширина (мм): ";
         let textFieldW = document.createElement("input");
         textFieldW.setAttribute("class", "text_field_params_box");
         textFieldW.setAttribute("value", rects[id].w);
@@ -264,7 +264,7 @@ function addParams(id) {
 
         let labelAndInputH = document.createElement("div");
         let labelH = document.createElement("label");
-        labelH.innerText = "Высота: ";
+        labelH.innerText = "Длина (мм): ";
         let textFieldH = document.createElement("input");
         textFieldH.setAttribute("class", "text_field_params_box");
         textFieldH.setAttribute("value", rects[id].h);
@@ -375,26 +375,26 @@ var isCursorInRect = (rect) => {
     let rectBottom = rect.y + rect.h;
 
     //курсор resize
-    if (mouse.x - rect.x < 10 && mouse.y - rect.y > 10 && (rectBottom - mouse.y) > 10 && mouse.x - rect.x > 0)
+    if (mouse.x - rect.x < 20 && mouse.y - rect.y > 20 && (rectBottom - mouse.y) > 20 && mouse.x - rect.x > 0)
         canvas.style.cursor = "w-resize";
-    if (mouse.y - rect.y < 10 && mouse.x - rect.x < 10 && mouse.x - rect.x > 0 && mouse.y - rect.y > 0)
+    if (mouse.y - rect.y < 20 && mouse.x - rect.x < 20 && mouse.x - rect.x > 0 && mouse.y - rect.y > 0)
         canvas.style.cursor = "nw-resize";
-    if (mouse.y - rect.y < 10 && mouse.x - rect.x > 10 && (rectRight - mouse.x) > 10 && mouse.y - rect.y > 0)
+    if (mouse.y - rect.y < 20 && mouse.x - rect.x > 20 && (rectRight - mouse.x) > 20 && mouse.y - rect.y > 0)
         canvas.style.cursor = "n-resize";
-    if (mouse.y - rect.y < 10 && rectRight - mouse.x < 10 && rectRight - mouse.x > 0 && mouse.y - rect.y > 0)
+    if (mouse.y - rect.y < 20 && rectRight - mouse.x < 20 && rectRight - mouse.x > 0 && mouse.y - rect.y > 0)
         canvas.style.cursor = "ne-resize";
-    if (rectRight - mouse.x < 10 && mouse.y - rect.y > 10 && (rectBottom - mouse.y) > 10 && rectRight - mouse.x > 0)
+    if (rectRight - mouse.x < 20 && mouse.y - rect.y > 20 && (rectBottom - mouse.y) > 20 && rectRight - mouse.x > 0)
         canvas.style.cursor = "e-resize";
-    if (rectBottom - mouse.y < 10 && rectRight - mouse.x < 10 && rectRight - mouse.x > 0 && rectBottom - mouse.y > 0)
+    if (rectBottom - mouse.y < 20 && rectRight - mouse.x < 20 && rectRight - mouse.x > 0 && rectBottom - mouse.y > 0)
         canvas.style.cursor = "se-resize";
-    if (rectBottom - mouse.y < 10 && mouse.x - rect.x > 10 && (rectRight - mouse.x) > 10 && rectBottom - mouse.y > 0)
+    if (rectBottom - mouse.y < 20 && mouse.x - rect.x > 20 && (rectRight - mouse.x) > 20 && rectBottom - mouse.y > 0)
         canvas.style.cursor = "s-resize";
-    if (rectBottom - mouse.y < 10 && mouse.x - rect.x < 10 && mouse.x - rect.x > 0 && rectBottom - mouse.y > 0)
+    if (rectBottom - mouse.y < 20 && mouse.x - rect.x < 20 && mouse.x - rect.x > 0 && rectBottom - mouse.y > 0)
         canvas.style.cursor = "sw-resize";
 
     //курсор move
-    if ((mouse.x - rect.x > 10) && (mouse.y - rect.y > 10) && ((rectRight - mouse.x) > 10) &&
-        ((rectBottom - mouse.y) > 10)) {
+    if ((mouse.x - rect.x > 20) && (mouse.y - rect.y > 20) && ((rectRight - mouse.x) > 20) &&
+        ((rectBottom - mouse.y) > 20)) {
         canvas.style.cursor = "move";
     }
 
@@ -402,39 +402,42 @@ var isCursorInRect = (rect) => {
     return (mouse.x > rect.x) && (mouse.x < rectRight) && (mouse.y > rect.y) && (mouse.y < rectBottom);
 }
 
-//function drawGrid() {
-//    for (var x = 0.5; x < canvasWidth; x += 30) {
-//        context.moveTo(x, 0);
-//        context.lineTo(x, canvasHeight);
-//    }
+//перенос начала системы координат в центр canvasa'а
+context.translate(canvas.offsetWidth / 2, canvas.offsetHeight / 2);
+//изначальные размеры комнаты
+var wallWidth = 5000, wallHeight = 2500;
 
-//    for (var y = 0.5; y < canvasHeight; y += 30) {
-//        context.moveTo(0, y);
-//        context.lineTo(canvasWidth, y);
-//    }
+//ввод ширины
+function inputRoomW() {
+    let inputW = document.getElementById("input_room_w");
+    wallWidth = inputW.value;
+}
 
-//    context.strokeStyle = "#888";
-//    context.stroke();
-//}
+function inputRoomH() {
+    let inputH = document.getElementById("input_room_h");
+    wallHeight = inputH.value;
+}
 
-var wallWidth=1400, wallHeight=1000;
-
-//стены комнаты
-function drawRoomWalls() {
+//комната
+function drawRoom() {
     context.beginPath();
-    context.moveTo(2, 2);
-    context.lineTo(wallWidth-2, 2);
-    context.lineTo(wallWidth - 2, wallHeight);
-    context.lineTo(2, wallHeight);
-    context.closePath();
+    context.moveTo(-wallWidth / 2, wallHeight / 2 - 300);
+    context.lineTo(-wallWidth / 2, -wallHeight / 2);
+    context.lineTo(wallWidth / 2, -wallHeight / 2);
+    context.lineTo(wallWidth / 2, wallHeight / 2);
+    context.lineTo(-wallWidth / 2, wallHeight / 2);
+    context.lineTo(-wallWidth / 2, wallHeight / 2 - 100);
 
     context.strokeStyle = '#929292';
-    context.lineWidth = 30;
+    context.lineWidth = 100;
+    context.fillStyle = '#CAE0E4';
+    context.fillRect(-wallWidth / 2, -wallHeight / 2, wallWidth, wallHeight);
     context.stroke();
 }
 
 //коэффициент увеличения масштаба
-var scale = 1;
+context.scale(0.2, 0.2);
+var scale = 0.2;
 
 //ф-я изменения масштаба
 function zoom(event) {
@@ -446,17 +449,14 @@ function zoom(event) {
         context.scale(0.9, 0.9);
         scale *= 0.9;
     }
-
-    let itemName = document.getElementById("itemName");
-    itemName.innerText = scale;
 }
 
 setInterval(() => {
-    context.clearRect(0, 0, canvas.width+1000, canvas.height+1000);
+    context.clearRect(-10000, -10000, 20000, 20000);
     canvas.style.cursor = "default";
 
-    //стены комнаты
-    drawRoomWalls();
+    //комната
+    drawRoom();
 
     //сброс названия
     let itemName = document.getElementById("itemName");
@@ -473,7 +473,7 @@ setInterval(() => {
 
         if (isCursorInRect(rects[i])) {
             context.strokeStyle = '#001EFF';
-            context.lineWidth = 1;
+            context.lineWidth = 5;
             //отрисовка синих границ объекта
             rects[i].stroke();
             //название объекта
@@ -490,18 +490,18 @@ setInterval(() => {
     if (strokeRect != false) {
         strokeRect.contextSet();
         context.strokeStyle = '#001EFF';
-        context.lineWidth = 1;
+        context.lineWidth = 5;
         strokeRect.stroke();
         strokeRect.contextUnset();
     }
 
     //перемещение объекта
-    if (selected && (mouse.x - selected.x > 10) && (mouse.y - selected.y > 10) && (((selected.x + selected.w) - mouse.x) > 10) &&
-        (((selected.y + selected.h) - mouse.y) > 10)) {
-        if ((mouse.x + selected.w / 2) < wallWidth && (mouse.x - selected.w / 2) > 0) {
+    if (selected && (mouse.x - selected.x > 20) && (mouse.y - selected.y > 20) && (((selected.x + selected.w) - mouse.x) > 20) &&
+        (((selected.y + selected.h) - mouse.y) > 20)) {
+        if ((mouse.x + selected.w / 2) < wallWidth && (mouse.x - selected.w / 2) > -wallWidth) {
             selected.x = mouse.x - selected.w / 2;
         }
-        if ((mouse.y + selected.h / 2) < wallHeight && (mouse.y - selected.h / 2) > 0) {
+        if ((mouse.y + selected.h / 2) < wallHeight && (mouse.y - selected.h / 2) > -wallHeight) {
             selected.y = mouse.y - selected.h / 2;
         }
     }
@@ -559,8 +559,8 @@ setInterval(() => {
 }, 1);
 
 canvas.onmousemove = function (e) {
-    mouse.x = (e.pageX - addedElems.offsetWidth) / scale;
-    mouse.y = (e.pageY - Header.offsetHeight) / scale;
+    mouse.x = (e.pageX - addedElems.offsetWidth - canvas.offsetWidth / 2) / scale;
+    mouse.y = (e.pageY - Header.offsetHeight - canvas.offsetHeight / 2) / scale;
 
     for (i in rects) {
         //запись координат в поля x и y
@@ -581,16 +581,16 @@ canvas.onmousemove = function (e) {
     }
 
     if (selected) {
-        if (mouse.x - selected.x < 10) {
+        if (mouse.x - selected.x < 20) {
             changeSizeXLeft = true;
         }
-        if ((selected.x + selected.w) - mouse.x < 10) {
+        if ((selected.x + selected.w) - mouse.x < 20) {
             changeSizeXRight = true;
         }
-        if (mouse.y - selected.y < 10) {
+        if (mouse.y - selected.y < 20) {
             changeSizeYTop = true;
         }
-        if (((selected.y + selected.h) - mouse.y) < 10) {
+        if (((selected.y + selected.h) - mouse.y) < 20) {
             changeSizeYBottom = true;
         }
     }
