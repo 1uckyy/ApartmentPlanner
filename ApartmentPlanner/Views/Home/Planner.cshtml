@@ -38,6 +38,36 @@
         <input type="text" name="" value="2500" class="input_wh" id="input_room_h" oninput="inputRoomH()"/>
         <label class="label_wh">мм</label>
     </div>
+    <div class="changes">
+        <div class="change_camera">
+            <div class="camera_up" onclick="camera.move(0, -1000);">
+                <div class="line_45deg line_45deg_up"></div>
+                <div class="line_45deg line_45deg_down"></div>
+            </div>
+            <div class="camera_down" onclick="camera.move(0, 1000);">
+                <div class="line_45deg line_45deg_up"></div>
+                <div class="line_45deg line_45deg_down"></div>
+            </div>
+            <div class="camera_left" onclick="camera.move(-1000, 0);">
+                <div class="line_45deg line_45deg_up"></div>
+                <div class="line_45deg line_45deg_down"></div>
+            </div>
+            <div class="camera_right" onclick="camera.move(1000, 0);">
+                <div class="line_45deg line_45deg_up"></div>
+                <div class="line_45deg line_45deg_down"></div>
+            </div>
+        </div>
+        <div class="change_scale">
+            <div class="plus_scale" onclick="zoomPlusMinus('plus')">
+                <div class="horiz_line horiz_line_plus_scale"></div>
+                <div class="vert_line vert_line_plus_scale"></div>
+            </div>
+            <div class="horiz_line horiz_line_del"></div>
+            <div class="minus_scale" onclick="zoomPlusMinus('minus')">
+                <div class="horiz_line horiz_line_minus_scale"></div>
+            </div>
+        </div>
+    </div>
     <div class="elems_for_add">
         <div class="added_elems_text">Элементы для добавления</div>
         <div class="furniture_items_container">

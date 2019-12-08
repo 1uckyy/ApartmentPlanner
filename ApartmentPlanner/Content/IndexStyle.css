@@ -50,11 +50,12 @@
     width: 25%;
 }
 
-    .view_capability img {
-        width: 200px;
-        height: 200px;
-        margin-bottom: 25px;
-    }
+.view_capability img {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 25px;
+
+}
 
 .text_capability {
     font-family: Microsoft YaHei;

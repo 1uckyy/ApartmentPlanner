@@ -351,8 +351,205 @@ canvas {
     width: 40px;
     height: 20px;
     margin: 0 6px;
+    border-radius: 5px;
 }
 
 .label_wh {
     font-size: 18px;
+}
+
+.changes {
+    position: absolute;
+    display: flex;
+    align-items: baseline;
+    right: 23%;
+    bottom: 65px;
+}
+
+.change_scale {
+    position: relative;
+    background-color: white;
+    width: 35px;
+    height: 80px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+}
+
+.plus_scale {
+    height: 49%;
+    cursor: pointer;
+}
+
+.plus_scale:hover {
+    background-color: lightgray;
+}
+
+.minus_scale {
+    height: 49%;
+    cursor: pointer;
+}
+
+.minus_scale:hover {
+    background-color: lightgray;
+}
+
+.horiz_line_plus_scale {
+    display: block;
+    background-color: black;
+    z-index: 2;
+    top: 25%;
+    width: 20px;
+    border-radius: 2px;
+}
+
+.vert_line_plus_scale {
+    display: block;
+    background-color: black;
+    z-index: 2;
+    top: 25%;
+    height: 20px;
+    border-radius: 2px;
+}
+
+.horiz_line_del {
+    display: block;
+    z-index: 2;
+    background-color: lightgrey;
+    width: 100%;
+    height: 2px;
+}
+
+.horiz_line_minus_scale {
+    display: block;
+    background-color: black;
+    z-index: 2;
+    top: unset;
+    bottom: 20%;
+    width: 20px;
+    border-radius: 2px;
+}
+
+.change_camera {
+    background-color: white;
+    width: 160px;
+    height: 35px;
+    display: flex;
+    position: relative;
+    margin-right: 10px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+}
+
+.camera_up, .camera_down, .camera_left, .camera_right {
+    position: relative;
+    cursor: pointer;
+    width: 25%;
+}
+
+.camera_up:hover {
+    background-color: lightgray;
+}
+
+.camera_down:hover {
+    background-color: lightgray;
+}
+
+.camera_left:hover {
+    background-color: lightgray;
+}
+
+.camera_right:hover {
+    background-color: lightgray;
+}
+
+.line_45deg {
+    content: "";
+    width: 4px;
+    height: 15px;
+    background-color: black;
+    border-radius: 2px;
+    position: absolute;
+}
+
+.camera_up .line_45deg_up {
+    transform: rotate(-50deg);
+    top: 29%;
+    left: 51%;
+}
+
+.camera_up .line_45deg_down {
+    transform: rotate(50deg);
+    top: 29%;
+    left: 29%;
+}
+
+.camera_down .line_45deg_up {
+    transform: rotate(50deg);
+    top: 29%;
+    left: 51%;
+}
+
+.camera_down .line_45deg_down {
+    transform: rotate(-50deg);
+    top: 29%;
+    left: 29%;
+}
+
+.camera_left .line_45deg_up {
+    transform: rotate(50deg);
+    top: 16%;
+    left: 40%;
+}
+
+.camera_left .line_45deg_down {
+    transform: rotate(-50deg);
+    top: 38%;
+    left: 40%;
+}
+
+.camera_right .line_45deg_up {
+    transform: rotate(-50deg);
+    top: 16%;
+    left: 40%;
+}
+
+.camera_right .line_45deg_down {
+    transform: rotate(50deg);
+    top: 38%;
+    left: 40%;
+}
+
+.camera_left:after {
+    content: "";
+    background-color: lightgray;
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+}
+.camera_right:after {
+    content: "";
+    background-color: lightgray;
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+}
+
+.camera_up:after {
+    content: "";
+    background-color: lightgray;
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+}
+
+.camera_down:after {
+    content: "";
+    background-color: lightgray;
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    right: 0;
 }

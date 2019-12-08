@@ -18,6 +18,16 @@ var mouse = {
     y: 0
 };
 
+var camera = {
+    x: 0,
+    y: 0,
+
+    move: function (x, y) {
+        this.x += x;
+        this.y += y;
+    }
+}
+
 //мышка зажата над объектом
 var selected = false;
 //вспом. перем. для изменения размеров
@@ -62,18 +72,18 @@ Rect.prototype = {
     },
 
     draw: function () {
-        context.drawImage(this.img, -this.w / 2, -this.h / 2, this.w, this.h);
+        context.drawImage(this.img, -this.w / 2 - camera.x, -this.h / 2 - camera.y, this.w, this.h);
     },
 
     stroke: function () {
-        context.strokeRect(-this.w / 2, -this.h / 2, this.w, this.h);
+        context.strokeRect(-this.w / 2 - camera.x, -this.h / 2 - camera.y, this.w, this.h);
     }
 }
 
 var i, rects = [], count = 0, strokeRect = false, namesArray = [];
 
 function add(imgSrc) {
-    rects.push(new Rect(imgSrc, 0, 0, 100, 107, 0));
+    rects.push(new Rect(imgSrc, 0, 0, 1000, 1000, 0));
 
     let item = document.createElement("div");
     item.setAttribute("class", "added_elem");
@@ -420,18 +430,19 @@ function inputRoomH() {
 
 //комната
 function drawRoom() {
-    context.beginPath();
-    context.moveTo(-wallWidth / 2, wallHeight / 2 - 300);
-    context.lineTo(-wallWidth / 2, -wallHeight / 2);
-    context.lineTo(wallWidth / 2, -wallHeight / 2);
-    context.lineTo(wallWidth / 2, wallHeight / 2);
-    context.lineTo(-wallWidth / 2, wallHeight / 2);
-    context.lineTo(-wallWidth / 2, wallHeight / 2 - 100);
+    //context.beginPath();
+    //context.moveTo(-wallWidth / 2, wallHeight / 2 - 300);
+    //context.lineTo(-wallWidth / 2, -wallHeight / 2);
+    //context.lineTo(wallWidth / 2, -wallHeight / 2);
+    //context.lineTo(wallWidth / 2, wallHeight / 2);
+    //context.lineTo(-wallWidth / 2, wallHeight / 2);
+    //context.lineTo(-wallWidth / 2, wallHeight / 2 - 100);
 
     context.strokeStyle = '#929292';
     context.lineWidth = 100;
     context.fillStyle = '#CAE0E4';
-    context.fillRect(-wallWidth / 2, -wallHeight / 2, wallWidth, wallHeight);
+    context.strokeRect(-wallWidth / 2 - camera.x, -wallHeight / 2 - camera.y, wallWidth, wallHeight);
+    context.fillRect(-wallWidth / 2 - camera.x, -wallHeight / 2 - camera.y, wallWidth, wallHeight);
     context.stroke();
 }
 
@@ -446,6 +457,17 @@ function zoom(event) {
         scale *= 1.1;
     }
     if (event.deltaY == 100) {
+        context.scale(0.9, 0.9);
+        scale *= 0.9;
+    }
+}
+
+function zoomPlusMinus(value) {
+    if (value == "plus") {
+        context.scale(1.1, 1.1);
+        scale *= 1.1;
+    }
+    if (value == "minus") {
         context.scale(0.9, 0.9);
         scale *= 0.9;
     }
@@ -559,8 +581,8 @@ setInterval(() => {
 }, 1);
 
 canvas.onmousemove = function (e) {
-    mouse.x = (e.pageX - addedElems.offsetWidth - canvas.offsetWidth / 2) / scale;
-    mouse.y = (e.pageY - Header.offsetHeight - canvas.offsetHeight / 2) / scale;
+    mouse.x = (e.pageX - addedElems.offsetWidth - canvas.offsetWidth / 2) / scale + camera.x;
+    mouse.y = (e.pageY - Header.offsetHeight - canvas.offsetHeight / 2) / scale + camera.y;
 
     for (i in rects) {
         //запись координат в поля x и y
@@ -623,4 +645,23 @@ canvas.onmouseup = function () {
     changeSizeXRight = false;
     changeSizeYTop = false;
     changeSizeYBottom = false;
+}
+
+//перемещение камеры
+addEventListener("keydown", moveCamera);
+function moveCamera(e) {
+    switch (e.keyCode) {
+        case 37:  // если нажата клавиша влево
+            camera.move(-1000,0);
+            break;
+        case 38:   // если нажата клавиша вверх
+            camera.move(0, -1000);
+            break;
+        case 39:   // если нажата клавиша вправо
+            camera.move(1000, 0);
+            break;
+        case 40:   // если нажата клавиша вниз
+            camera.move(0, 1000);
+            break;
+    }
 }
