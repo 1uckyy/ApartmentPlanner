@@ -1,4 +1,5 @@
 ﻿var canvas = document.getElementById("canvas");
+canvas.addEventListener('wheel', zoom);
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 var canvasWidth = canvas.width;
@@ -416,11 +417,27 @@ var isCursorInRect = (rect) => {
 //    context.stroke();
 //}
 
-setInterval(() => {
-    context.clearRect(0, 0, canvasWidth, canvasHeight);
-    canvas.style.cursor = "default";
+//коэффициент увеличения масштаба
+var scale = 1;
 
-    //drawGrid();
+//ф-я изменения масштаба
+function zoom(event) {
+    if (event.deltaY == -100) {
+        context.scale(1.1, 1.1);
+        scale *= 1.1;
+    }
+    if (event.deltaY == 100) {
+        context.scale(0.9, 0.9);
+        scale *= 0.9;
+    }
+
+    let itemName = document.getElementById("itemName");
+    itemName.innerText = scale;
+}
+
+setInterval(() => {
+    context.clearRect(0, 0, canvas.width+1000, canvas.height+1000);
+    canvas.style.cursor = "default";
 
     //сброс названия
     let itemName = document.getElementById("itemName");
@@ -521,8 +538,8 @@ setInterval(() => {
 }, 1);
 
 canvas.onmousemove = function (e) {
-    mouse.x = e.pageX - addedElems.offsetWidth;
-    mouse.y = e.pageY - Header.offsetHeight;
+    mouse.x = (e.pageX - addedElems.offsetWidth) / scale;
+    mouse.y = (e.pageY - Header.offsetHeight) / scale;
 
     for (i in rects) {
         //запись координат в поля x и y

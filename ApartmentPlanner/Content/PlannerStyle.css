@@ -239,7 +239,7 @@ input[type=range] {
 }
 
 canvas {
-    background-color: rgb(219, 226, 226);
+    background-color: beige;
     width: 56%;
 }
 
