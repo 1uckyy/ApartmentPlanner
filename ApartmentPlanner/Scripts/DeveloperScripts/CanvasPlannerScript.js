@@ -417,6 +417,22 @@ var isCursorInRect = (rect) => {
 //    context.stroke();
 //}
 
+var wallWidth=1400, wallHeight=1000;
+
+//стены комнаты
+function drawRoomWalls() {
+    context.beginPath();
+    context.moveTo(2, 2);
+    context.lineTo(wallWidth-2, 2);
+    context.lineTo(wallWidth - 2, wallHeight);
+    context.lineTo(2, wallHeight);
+    context.closePath();
+
+    context.strokeStyle = '#929292';
+    context.lineWidth = 30;
+    context.stroke();
+}
+
 //коэффициент увеличения масштаба
 var scale = 1;
 
@@ -439,6 +455,9 @@ setInterval(() => {
     context.clearRect(0, 0, canvas.width+1000, canvas.height+1000);
     canvas.style.cursor = "default";
 
+    //стены комнаты
+    drawRoomWalls();
+
     //сброс названия
     let itemName = document.getElementById("itemName");
     itemName.innerText = "";
@@ -454,6 +473,7 @@ setInterval(() => {
 
         if (isCursorInRect(rects[i])) {
             context.strokeStyle = '#001EFF';
+            context.lineWidth = 1;
             //отрисовка синих границ объекта
             rects[i].stroke();
             //название объекта
@@ -470,6 +490,7 @@ setInterval(() => {
     if (strokeRect != false) {
         strokeRect.contextSet();
         context.strokeStyle = '#001EFF';
+        context.lineWidth = 1;
         strokeRect.stroke();
         strokeRect.contextUnset();
     }
@@ -477,10 +498,10 @@ setInterval(() => {
     //перемещение объекта
     if (selected && (mouse.x - selected.x > 10) && (mouse.y - selected.y > 10) && (((selected.x + selected.w) - mouse.x) > 10) &&
         (((selected.y + selected.h) - mouse.y) > 10)) {
-        if ((mouse.x + selected.w / 2) < canvasWidth && (mouse.x - selected.w / 2) > 0) {
+        if ((mouse.x + selected.w / 2) < wallWidth && (mouse.x - selected.w / 2) > 0) {
             selected.x = mouse.x - selected.w / 2;
         }
-        if ((mouse.y + selected.h / 2) < canvasHeight && (mouse.y - selected.h / 2) > 0) {
+        if ((mouse.y + selected.h / 2) < wallHeight && (mouse.y - selected.h / 2) > 0) {
             selected.y = mouse.y - selected.h / 2;
         }
     }
