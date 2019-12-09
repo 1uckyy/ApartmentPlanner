@@ -15,7 +15,9 @@ var addedElemsContainer = document.getElementById("added_elems_container");
 
 var mouse = {
     x: 0,
-    y: 0
+    y: 0,
+    onItemX: 0, //координата x над захваченным объектом
+    onItemY: 0 //координата y над захваченным объектом
 };
 
 var camera = {
@@ -513,10 +515,10 @@ setInterval(() => {
     if (selected && (mouse.x - selected.x > 20) && (mouse.y - selected.y > 20) && (((selected.x + selected.w) - mouse.x) > 20) &&
         (((selected.y + selected.h) - mouse.y) > 20)) {
         if ((mouse.x + selected.w / 2) < wallWidth && (mouse.x - selected.w / 2) > -wallWidth) {
-            selected.x = mouse.x - selected.w / 2;
+            selected.x = mouse.x + mouse.onItemX;
         }
         if ((mouse.y + selected.h / 2) < wallHeight && (mouse.y - selected.h / 2) > -wallHeight) {
-            selected.y = mouse.y - selected.h / 2;
+            selected.y = mouse.y + mouse.onItemY;
         }
     }
 
@@ -625,6 +627,10 @@ canvas.onmousedown = function () {
         for (i in rects) {
             if (isCursorInRect(rects[i])) {
                 selected = rects[i];
+
+                //координаты мыши относительно самого объекта
+                mouse.onItemX = selected.returnX() - mouse.x;
+                mouse.onItemY = selected.returnY() - mouse.y;
             }
         }
     }
