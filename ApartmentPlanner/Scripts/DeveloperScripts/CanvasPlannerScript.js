@@ -60,7 +60,7 @@ Rect.prototype = {
     contextSet: function () {
         let newX = this.returnX() + this.w / 2;
         let newY = this.returnY() + this.h / 2;
-        context.translate(newX, newY);
+        context.translate(newX-camera.x, newY-camera.y);
         context.rotate(this.angle * Math.PI / 180);
     },
 
@@ -68,15 +68,15 @@ Rect.prototype = {
         let newX = this.returnX() + this.w / 2;
         let newY = this.returnY() + this.h / 2;
         context.rotate(-this.angle * Math.PI / 180);
-        context.translate(-newX, -newY);
+        context.translate(-newX+camera.x, -newY+camera.y);
     },
 
     draw: function () {
-        context.drawImage(this.img, -this.w / 2 - camera.x, -this.h / 2 - camera.y, this.w, this.h);
+        context.drawImage(this.img, -this.w / 2, -this.h / 2, this.w, this.h);
     },
 
     stroke: function () {
-        context.strokeRect(-this.w / 2 - camera.x, -this.h / 2 - camera.y, this.w, this.h);
+        context.strokeRect(-this.w / 2, -this.h / 2, this.w, this.h);
     }
 }
 
@@ -430,14 +430,6 @@ function inputRoomH() {
 
 //комната
 function drawRoom() {
-    //context.beginPath();
-    //context.moveTo(-wallWidth / 2, wallHeight / 2 - 300);
-    //context.lineTo(-wallWidth / 2, -wallHeight / 2);
-    //context.lineTo(wallWidth / 2, -wallHeight / 2);
-    //context.lineTo(wallWidth / 2, wallHeight / 2);
-    //context.lineTo(-wallWidth / 2, wallHeight / 2);
-    //context.lineTo(-wallWidth / 2, wallHeight / 2 - 100);
-
     context.strokeStyle = '#929292';
     context.lineWidth = 100;
     context.fillStyle = '#CAE0E4';
