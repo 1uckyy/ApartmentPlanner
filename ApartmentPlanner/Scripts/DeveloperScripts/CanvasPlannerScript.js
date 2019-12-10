@@ -13,6 +13,9 @@ var Header = document.getElementById("header");
 var addedElems = document.getElementById("added_elems");
 var addedElemsContainer = document.getElementById("added_elems_container");
 
+//двигаем или изменяем размеры?
+var moveItem;
+
 var mouse = {
     x: 0,
     y: 0,
@@ -59,18 +62,44 @@ Rect.prototype = {
         return this.y;
     },
 
+    returnW: function () {
+        return this.w;
+    },
+
+    returnH: function () {
+        return this.h;
+    },
+
+    getCenterX() {
+        return this.x + this.w / 2;
+    },
+
+    getCenterY() {
+        return this.y + this.h / 2;
+    },
+
+    getAngleInRadian() {
+        return this.angle * Math.PI / 180;
+    },
+
+    getXWithRotate() {
+        return this.x * Math.cos(this.getAngleInRadian()) - this.y * Math.sin(this.getAngleInRadian()) /*перенос*/
+            - this.getCenterX() * (Math.cos(this.getAngleInRadian()) - 1) + this.getCenterY() * Math.sin(this.getAngleInRadian());
+    },
+
+    getYWithRotate() {
+        return this.x * Math.sin(this.getAngleInRadian()) + this.y * Math.cos(this.getAngleInRadian()) /*перенос*/
+            - this.getCenterY() * (Math.cos(this.getAngleInRadian()) - 1) - this.getCenterX() * Math.sin(this.getAngleInRadian());
+    },
+
     contextSet: function () {
-        let newX = this.returnX() + this.w / 2;
-        let newY = this.returnY() + this.h / 2;
-        context.translate(newX-camera.x, newY-camera.y);
-        context.rotate(this.angle * Math.PI / 180);
+        context.translate(this.getCenterX() - camera.x, this.getCenterY() - camera.y);
+        context.rotate(this.getAngleInRadian());
     },
 
     contextUnset: function () {
-        let newX = this.returnX() + this.w / 2;
-        let newY = this.returnY() + this.h / 2;
         context.rotate(-this.angle * Math.PI / 180);
-        context.translate(-newX+camera.x, -newY+camera.y);
+        context.translate(-this.getCenterX() + camera.x, -this.getCenterY() + camera.y);
     },
 
     draw: function () {
@@ -360,7 +389,7 @@ function inputH(id) {
 function rotate(id) {
     let slider = document.getElementById("slider" + id);
     let sliderValue = document.getElementById("sliderValue" + id);
-    rects[id].angle = slider.value;
+    rects[id].angle = parseInt(slider.value);
     sliderValue.value = slider.value;
 }
 
@@ -368,7 +397,7 @@ function rotate(id) {
 function rotateValue(id) {
     let slider = document.getElementById("slider" + id);
     let sliderValue = document.getElementById("sliderValue" + id);
-    rects[id].angle = sliderValue.value;
+    rects[id].angle = parseInt(sliderValue.value);
     slider.value = sliderValue.value;
 }
 
@@ -383,35 +412,46 @@ function clearContainer() {
 }
 
 var isCursorInRect = (rect) => {
-    let rectRight = rect.x + rect.w;
-    let rectBottom = rect.y + rect.h;
+    //let rectRight = rect.x + rect.w;
+    //let rectBottom = rect.y + rect.h;
+
+    let rectRight = rect.getXWithRotate() * (-1) - rect.getCenterX() * (-2);
+    let rectBottom = rect.getYWithRotate() * (-1) - rect.getCenterY() * (-2);
+
+    //находим коэффициент b в уравнении у = kх + b
+    let b = rect.getYWithRotate() - Math.tan(rect.angle * Math.PI / 180) * rect.getXWithRotate();
+    let b_opposite = rectBottom - Math.tan(rect.angle * Math.PI / 180) * rectRight;
 
     //курсор resize
-    if (mouse.x - rect.x < 20 && mouse.y - rect.y > 20 && (rectBottom - mouse.y) > 20 && mouse.x - rect.x > 0)
-        canvas.style.cursor = "w-resize";
-    if (mouse.y - rect.y < 20 && mouse.x - rect.x < 20 && mouse.x - rect.x > 0 && mouse.y - rect.y > 0)
-        canvas.style.cursor = "nw-resize";
-    if (mouse.y - rect.y < 20 && mouse.x - rect.x > 20 && (rectRight - mouse.x) > 20 && mouse.y - rect.y > 0)
-        canvas.style.cursor = "n-resize";
-    if (mouse.y - rect.y < 20 && rectRight - mouse.x < 20 && rectRight - mouse.x > 0 && mouse.y - rect.y > 0)
-        canvas.style.cursor = "ne-resize";
-    if (rectRight - mouse.x < 20 && mouse.y - rect.y > 20 && (rectBottom - mouse.y) > 20 && rectRight - mouse.x > 0)
-        canvas.style.cursor = "e-resize";
-    if (rectBottom - mouse.y < 20 && rectRight - mouse.x < 20 && rectRight - mouse.x > 0 && rectBottom - mouse.y > 0)
-        canvas.style.cursor = "se-resize";
-    if (rectBottom - mouse.y < 20 && mouse.x - rect.x > 20 && (rectRight - mouse.x) > 20 && rectBottom - mouse.y > 0)
-        canvas.style.cursor = "s-resize";
-    if (rectBottom - mouse.y < 20 && mouse.x - rect.x < 20 && mouse.x - rect.x > 0 && rectBottom - mouse.y > 0)
-        canvas.style.cursor = "sw-resize";
+    //if (mouse.x - rect.x < 20 && mouse.y - rect.y > 20 && (rectBottom - mouse.y) > 20 && mouse.x - rect.x > 0)
+    //    canvas.style.cursor = "w-resize";
+    //if (mouse.y - rect.y < 20 && mouse.x - rect.x < 20 && mouse.x - rect.x > 0 && mouse.y - rect.y > 0)
+    //    canvas.style.cursor = "nw-resize";
+    //if (mouse.y - rect.y < 20 && mouse.x - rect.x > 20 && (rectRight - mouse.x) > 20 && mouse.y - rect.y > 0)
+    //    canvas.style.cursor = "n-resize";
+    //if (mouse.y - rect.y < 20 && rectRight - mouse.x < 20 && rectRight - mouse.x > 0 && mouse.y - rect.y > 0)
+    //    canvas.style.cursor = "ne-resize";
+    //if (rectRight - mouse.x < 20 && mouse.y - rect.y > 20 && (rectBottom - mouse.y) > 20 && rectRight - mouse.x > 0)
+    //    canvas.style.cursor = "e-resize";
+    //if (rectBottom - mouse.y < 20 && rectRight - mouse.x < 20 && rectRight - mouse.x > 0 && rectBottom - mouse.y > 0)
+    //    canvas.style.cursor = "se-resize";
+    //if (rectBottom - mouse.y < 20 && mouse.x - rect.x > 20 && (rectRight - mouse.x) > 20 && rectBottom - mouse.y > 0)
+    //    canvas.style.cursor = "s-resize";
+    //if (rectBottom - mouse.y < 20 && mouse.x - rect.x < 20 && mouse.x - rect.x > 0 && rectBottom - mouse.y > 0)
+    //    canvas.style.cursor = "sw-resize";
 
     //курсор move
-    if ((mouse.x - rect.x > 20) && (mouse.y - rect.y > 20) && ((rectRight - mouse.x) > 20) &&
-        ((rectBottom - mouse.y) > 20)) {
+    //if ((mouse.x - rect.x > 20) && (mouse.y - rect.y > 20) && ((rectRight - mouse.x) > 20) &&
+    //    ((rectBottom - mouse.y) > 20))
+    //    canvas.style.cursor = "move";
+
+    //if ((mouse.y > (Math.tan(rect.angle * Math.PI / 180) * mouse.x + rect.getYWithRotate())) && (mouse.y < (Math.tan(rect.angle * Math.PI / 180) * mouse.x + rectBottom)) && (mouse.x > (Math.tan(rect.angle * Math.PI / 180) * mouse.y + rect.getXWithRotate())) && (mouse.x < (Math.tan(rect.angle * Math.PI / 180) * mouse.y + rectRight)))
+    //    canvas.style.cursor = "move";
+
+    if (/*(mouse.y > (Math.tan(rect.angle * Math.PI / 180) * mouse.x + b)) && (mouse.y < (Math.tan(rect.angle * Math.PI / 180) * mouse.x + b_opposite)) && */(mouse.x > (Math.tan(rect.angle * Math.PI / 180) * mouse.y - b))/* && (mouse.x < (Math.tan(rect.angle * Math.PI / 180) * mouse.y + rectRight))*/)
         canvas.style.cursor = "move";
-    }
 
-
-    return (mouse.x > rect.x) && (mouse.x < rectRight) && (mouse.y > rect.y) && (mouse.y < rectBottom);
+    return (mouse.x > rect.x - 5) && (mouse.x < rectRight + 5) && (mouse.y > rect.y - 5) && (mouse.y < rectBottom + 5);
 }
 
 //перенос начала системы координат в центр canvasa'а
@@ -511,19 +551,40 @@ setInterval(() => {
         strokeRect.contextUnset();
     }
 
-    //перемещение объекта
-    if (selected && (mouse.x - selected.x > 20) && (mouse.y - selected.y > 20) && (((selected.x + selected.w) - mouse.x) > 20) &&
-        (((selected.y + selected.h) - mouse.y) > 20)) {
-        if ((mouse.x + selected.w / 2) < wallWidth && (mouse.x - selected.w / 2) > -wallWidth) {
-            selected.x = mouse.x + mouse.onItemX;
+    if ((selected.h < 200 || selected.w < 200) && moveItem == false) {
+        //влево
+        if (changeSizeXLeft) {
+            if (selected.x > mouse.x) {
+                selected.w += selected.x - mouse.x;
+                selected.x = mouse.x;
+            }
         }
-        if ((mouse.y + selected.h / 2) < wallHeight && (mouse.y - selected.h / 2) > -wallHeight) {
-            selected.y = mouse.y + mouse.onItemY;
+
+        //вправо
+        if (changeSizeXRight) {
+            let selectedXRight = selected.x + selected.w;
+            if (selectedXRight < mouse.x)
+                selected.w += mouse.x - selectedXRight;
+        }
+
+        //наверх
+        if (changeSizeYTop) {
+            if (selected.y > mouse.y) {
+                selected.h += selected.y - mouse.y;
+                selected.y = mouse.y;
+            }
+        }
+
+        //вниз
+        if (changeSizeYBottom) {
+            let selectedYBottom = selected.y + selected.h;
+            if (selectedYBottom < mouse.y)
+                selected.h += mouse.y - selectedYBottom;
         }
     }
 
     //не применять если высота или ширина слишком маленькие
-    if (selected && selected.h >= 40 && selected.w >= 40) {
+    if (selected.h >= 200 && selected.w >= 200 && moveItem == false) {
         //изменение размера объекта
         //влево
         if (changeSizeXLeft) {
@@ -566,11 +627,17 @@ setInterval(() => {
             if (selectedYBottom < mouse.y)
                 selected.h += mouse.y - selectedYBottom;
         }
-    } else {
-        if (selected.h < 40)
-            selected.h = 40;
-        if (selected.w < 40)
-            selected.w = 40;
+    }
+
+    //перемещение объекта
+    if (selected && (mouse.x - selected.x > 20) && (mouse.y - selected.y > 20) && (((selected.x + selected.w) - mouse.x) > 20) &&
+        (((selected.y + selected.h) - mouse.y) > 20) && moveItem == true) {
+        if ((mouse.x + selected.w / 2) < wallWidth && (mouse.x - selected.w / 2) > -wallWidth) {
+            selected.x = mouse.x + mouse.onItemX;
+        }
+        if ((mouse.y + selected.h / 2) < wallHeight && (mouse.y - selected.h / 2) > -wallHeight) {
+            selected.y = mouse.y + mouse.onItemY;
+        }
     }
 }, 1);
 
@@ -631,6 +698,14 @@ canvas.onmousedown = function () {
                 //координаты мыши относительно самого объекта
                 mouse.onItemX = selected.returnX() - mouse.x;
                 mouse.onItemY = selected.returnY() - mouse.y;
+
+                let rectRight = selected.x + selected.w;
+                let rectBottom = selected.y + selected.h;
+                if ((mouse.x - selected.x > 20) && (mouse.y - selected.y > 20) && ((rectRight - mouse.x) > 20) &&
+                    ((rectBottom - mouse.y) > 20))
+                    moveItem = true;
+                else
+                    moveItem = false;
             }
         }
     }
@@ -650,16 +725,16 @@ addEventListener("keydown", moveCamera);
 function moveCamera(e) {
     switch (e.keyCode) {
         case 37:  // если нажата клавиша влево
-            camera.move(-1000,0);
+            camera.move(-100, 0);
             break;
         case 38:   // если нажата клавиша вверх
-            camera.move(0, -1000);
+            camera.move(0, -100);
             break;
         case 39:   // если нажата клавиша вправо
-            camera.move(1000, 0);
+            camera.move(100, 0);
             break;
         case 40:   // если нажата клавиша вниз
-            camera.move(0, 1000);
+            camera.move(0, 100);
             break;
     }
 }
