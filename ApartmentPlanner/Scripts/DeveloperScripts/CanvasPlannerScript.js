@@ -422,36 +422,45 @@ var isCursorInRect = (rect) => {
     let b = rect.getYWithRotate() - Math.tan(rect.angle * Math.PI / 180) * rect.getXWithRotate();
     let b_opposite = rectBottom - Math.tan(rect.angle * Math.PI / 180) * rectRight;
 
-    //курсор resize
-    //if (mouse.x - rect.x < 20 && mouse.y - rect.y > 20 && (rectBottom - mouse.y) > 20 && mouse.x - rect.x > 0)
-    //    canvas.style.cursor = "w-resize";
-    //if (mouse.y - rect.y < 20 && mouse.x - rect.x < 20 && mouse.x - rect.x > 0 && mouse.y - rect.y > 0)
-    //    canvas.style.cursor = "nw-resize";
-    //if (mouse.y - rect.y < 20 && mouse.x - rect.x > 20 && (rectRight - mouse.x) > 20 && mouse.y - rect.y > 0)
-    //    canvas.style.cursor = "n-resize";
-    //if (mouse.y - rect.y < 20 && rectRight - mouse.x < 20 && rectRight - mouse.x > 0 && mouse.y - rect.y > 0)
-    //    canvas.style.cursor = "ne-resize";
-    //if (rectRight - mouse.x < 20 && mouse.y - rect.y > 20 && (rectBottom - mouse.y) > 20 && rectRight - mouse.x > 0)
-    //    canvas.style.cursor = "e-resize";
-    //if (rectBottom - mouse.y < 20 && rectRight - mouse.x < 20 && rectRight - mouse.x > 0 && rectBottom - mouse.y > 0)
-    //    canvas.style.cursor = "se-resize";
-    //if (rectBottom - mouse.y < 20 && mouse.x - rect.x > 20 && (rectRight - mouse.x) > 20 && rectBottom - mouse.y > 0)
-    //    canvas.style.cursor = "s-resize";
-    //if (rectBottom - mouse.y < 20 && mouse.x - rect.x < 20 && mouse.x - rect.x > 0 && rectBottom - mouse.y > 0)
-    //    canvas.style.cursor = "sw-resize";
+    //находим коэффициент b в уравнении у = kх + b
+    let bOtherAngle = rect.getXWithRotate() + Math.tan(rect.angle * Math.PI / 180) * rect.getYWithRotate();
+    let b_oppositeOtherAngle = rectRight + Math.tan(rect.angle * Math.PI / 180) * rectBottom;
 
-    //курсор move
-    //if ((mouse.x - rect.x > 20) && (mouse.y - rect.y > 20) && ((rectRight - mouse.x) > 20) &&
-    //    ((rectBottom - mouse.y) > 20))
-    //    canvas.style.cursor = "move";
+    let selectedByCursor = false;
 
-    //if ((mouse.y > (Math.tan(rect.angle * Math.PI / 180) * mouse.x + rect.getYWithRotate())) && (mouse.y < (Math.tan(rect.angle * Math.PI / 180) * mouse.x + rectBottom)) && (mouse.x > (Math.tan(rect.angle * Math.PI / 180) * mouse.y + rect.getXWithRotate())) && (mouse.x < (Math.tan(rect.angle * Math.PI / 180) * mouse.y + rectRight)))
-    //    canvas.style.cursor = "move";
+    if (rect.angle <= 90 || rect.angle > 270) {
+        if ((mouse.y > (Math.tan(rect.angle * Math.PI / 180) * mouse.x + b)) && (mouse.y < (Math.tan(rect.angle * Math.PI / 180) * mouse.x + b_opposite)) && (mouse.x > - (Math.tan(rect.angle * Math.PI / 180) * mouse.y - bOtherAngle)) && (mouse.x < - (Math.tan(rect.angle * Math.PI / 180) * mouse.y - b_oppositeOtherAngle))) {
+            canvas.style.cursor = "move";
+            selectedByCursor = true;
+        }
+    } else {
+        if ((mouse.y < (Math.tan(rect.angle * Math.PI / 180) * mouse.x + b)) && (mouse.y > (Math.tan(rect.angle * Math.PI / 180) * mouse.x + b_opposite)) && (mouse.x < - (Math.tan(rect.angle * Math.PI / 180) * mouse.y - bOtherAngle)) && (mouse.x > - (Math.tan(rect.angle * Math.PI / 180) * mouse.y - b_oppositeOtherAngle))) {
+            canvas.style.cursor = "move";
+            selectedByCursor = true;
+        }
+    }
 
-    if (/*(mouse.y > (Math.tan(rect.angle * Math.PI / 180) * mouse.x + b)) && (mouse.y < (Math.tan(rect.angle * Math.PI / 180) * mouse.x + b_opposite)) && */(mouse.x > (Math.tan(rect.angle * Math.PI / 180) * mouse.y - b))/* && (mouse.x < (Math.tan(rect.angle * Math.PI / 180) * mouse.y + rectRight))*/)
-        canvas.style.cursor = "move";
+    if (rect.angle == 0) {
+        //курсор resize
+        if (mouse.x - rect.x < 20 && mouse.y - rect.y > 20 && (rectBottom - mouse.y) > 20 && mouse.x - rect.x > 0)
+            canvas.style.cursor = "w-resize";
+        if (mouse.y - rect.y < 20 && mouse.x - rect.x < 20 && mouse.x - rect.x > 0 && mouse.y - rect.y > 0)
+            canvas.style.cursor = "nw-resize";
+        if (mouse.y - rect.y < 20 && mouse.x - rect.x > 20 && (rectRight - mouse.x) > 20 && mouse.y - rect.y > 0)
+            canvas.style.cursor = "n-resize";
+        if (mouse.y - rect.y < 20 && rectRight - mouse.x < 20 && rectRight - mouse.x > 0 && mouse.y - rect.y > 0)
+            canvas.style.cursor = "ne-resize";
+        if (rectRight - mouse.x < 20 && mouse.y - rect.y > 20 && (rectBottom - mouse.y) > 20 && rectRight - mouse.x > 0)
+            canvas.style.cursor = "e-resize";
+        if (rectBottom - mouse.y < 20 && rectRight - mouse.x < 20 && rectRight - mouse.x > 0 && rectBottom - mouse.y > 0)
+            canvas.style.cursor = "se-resize";
+        if (rectBottom - mouse.y < 20 && mouse.x - rect.x > 20 && (rectRight - mouse.x) > 20 && rectBottom - mouse.y > 0)
+            canvas.style.cursor = "s-resize";
+        if (rectBottom - mouse.y < 20 && mouse.x - rect.x < 20 && mouse.x - rect.x > 0 && rectBottom - mouse.y > 0)
+            canvas.style.cursor = "sw-resize";
+    }
 
-    return (mouse.x > rect.x - 5) && (mouse.x < rectRight + 5) && (mouse.y > rect.y - 5) && (mouse.y < rectBottom + 5);
+    return selectedByCursor;
 }
 
 //перенос начала системы координат в центр canvasa'а
